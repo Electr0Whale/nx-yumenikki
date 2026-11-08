@@ -13,7 +13,8 @@ keys/
 
 # Temporary Build, Work & Distribution Artifacts
 vendor/
-build/
+build/*
+!build/README.md
 dist/
 work/game/
 work/src/

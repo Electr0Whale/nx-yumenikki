@@ -30,7 +30,7 @@ g++ -std=c++17 -DUSE_SDL=1 \
   -I/home/ubuntu/yn-build/vendor/easyrpg-player-0.8.1.1/src \
   -I/home/ubuntu/yn-build/vendor/liblcf-0.8.1/src \
   -I/opt/devkitpro/portlibs/switch/include \
-  /mnt/c/Users/Admin/.gemini/antigravity/brain/c6333cf5-55f5-4706-9443-139400ebff77/scratch/test_input_mapping.cpp \
+  /mnt/d/YumeNikki-Nx/tools/tests/test_input_mapping.cpp \
   -o /tmp/test_input_mapping
 /tmp/test_input_mapping
 
@@ -54,9 +54,18 @@ cd /home/ubuntu/yn-build/package_v2
 rm -rf hacbrewpack_temp hacbrewpack_nca hacbrewpack_nsp hacbrewpack_backup out nca
 mkdir -p out nca
 
+KEYS_FILE="/mnt/d/YumeNikki-Nx/keys/prod.keys"
+if [ ! -f "$KEYS_FILE" ]; then
+  KEYS_FILE="/mnt/d/Download/SwitchKeys/prod.keys"
+fi
+if [ ! -f "$KEYS_FILE" ]; then
+  echo "Error: Switch prod.keys not found!"
+  exit 1
+fi
+
 /home/ubuntu/yn-build/tools/hacbrewpack_src/hacBrewPack-master/hacbrewpack \
   --nologo --keepncadir \
-  -k /mnt/d/Download/SwitchKeys/prod.keys \
+  -k "$KEYS_FILE" \
   --nspdir ./out --ncadir ./nca > ./hacbrewpack_v3.log 2>&1
 
 tail -n 25 ./hacbrewpack_v3.log

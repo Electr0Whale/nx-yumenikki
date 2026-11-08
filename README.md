@@ -8,6 +8,9 @@
 
 基于 [EasyRPG Player](https://easyrpg.org/) 引擎核心，深度重构 Switch 平台输入系统、显示管线及 HOS 系统服务集成，支持通过 **DBI** 独立安装至主机桌面运行，无需前置安装 RetroArch、hbmenu 或 EasyRPG 通用前端。
 
+> [!IMPORTANT]
+> **后续接手与开发者必读**：本项目全景架构设计、机身 NAND 存档事务原理、按键锁存算法、全量贴图重绘说明及故障排查手册，请详见 **[项目核心接手文档 (HANDOVER.md)](HANDOVER.md)**。
+
 ---
 
 ## 🌟 移植特性
@@ -73,17 +76,22 @@
 
 ```text
 YumeNikki-Nx/
+├── HANDOVER.md                             # 核心接手与全景开发文档 (必读)
+├── README.md                               # 项目主说明文档
+├── dist/                                   # 预编译 Release NSP / NRO 交付包
+├── docs/                                   # 历史会话记录与技术调研文档
+├── keys/                                   # 打包密钥 (本地专用，不入库)
 ├── patches/
-│   └── easyrpg-player-yumenikki-nx.patch   # 核心引擎源码修改补丁
+│   └── easyrpg-player-yumenikki-nx.patch   # 核心引擎源码修改补丁 (37KB)
 ├── tools/
 │   ├── build_nsp_v3.sh                     # 自动化全流程构建与打包脚本
 │   ├── build_npdm.py                       # NPDM JSON 描述符构建
-│   └── patch_nacp.py                       # NACP 官方 NAND 存档属性修补脚本
+│   ├── patch_nacp.py                       # NACP 官方 NAND 存档属性修补脚本
+│   └── tests/                              # 输入映射与防误触单元测试
 ├── work/
-│   ├── icon_256.jpg                        # 256x256 高清游戏图标
-│   └── patched_picture/                    # 重绘后的 7 张 Switch 提示图 (.xyz)
-├── yumenikki0.10chs/                       # 梦日记简体中文原版资产与资源
-└── README.md
+│   ├── icon_256.jpg                        # 256x256 高清点阵游戏图标
+│   └── patched_picture/                    # 重绘后的 8 张 Switch 专用点阵图 (.xyz)
+└── yumenikki0.10chs/                       # 梦日记简体中文原版资产与资源
 ```
 
 ### 从源码编译流程
