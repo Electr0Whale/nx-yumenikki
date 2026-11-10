@@ -29,6 +29,10 @@ def patch_nacp(path: str) -> None:
     # StartupUserAccount: 1 = Required (prompts HOS user selector at launch)
     data[0x3025] = 1
 
+    # DisplayVersion (0x3060, 16 bytes ASCII)
+    version_str = b"1.2.1\x00"
+    data[0x3060:0x3060 + len(version_str)] = version_str
+
     # SaveDataOwnerId
     struct.pack_into("<Q", data, 0x3078, TITLE_ID)
 
@@ -39,6 +43,35 @@ def patch_nacp(path: str) -> None:
     # UserAccountSaveDataSizeMax & UserAccountSaveDataJournalSizeMax
     struct.pack_into("<Q", data, 0x3148, SAVE_MAX)
     struct.pack_into("<Q", data, 0x3150, JOURNAL_MAX)
+
+    # Localized titles for Switch Home Menu
+    titles = {
+        0: ("Yume Nikki", "KIKIYAMA"),          # AmericanEnglish
+        1: ("Yume Nikki", "KIKIYAMA"),          # BritishEnglish
+        2: ("ゆめにっき", "ききやま"),              # Japanese
+        3: ("Yume Nikki", "KIKIYAMA"),          # French
+        4: ("Yume Nikki", "KIKIYAMA"),          # German
+        5: ("Yume Nikki", "KIKIYAMA"),          # LatinAmericanSpanish
+        6: ("Yume Nikki", "KIKIYAMA"),          # Spanish
+        7: ("Yume Nikki", "KIKIYAMA"),          # Italian
+        8: ("Yume Nikki", "KIKIYAMA"),          # Dutch
+        9: ("Yume Nikki", "KIKIYAMA"),          # CanadianFrench
+        10: ("Yume Nikki", "KIKIYAMA"),         # Portuguese
+        11: ("Yume Nikki", "KIKIYAMA"),         # Russian
+        12: ("유메닛키", "키키야마"),             # Korean
+        13: ("夢日記", "ききやま"),                # TraditionalChinese
+        14: ("梦日记", "ききやま"),                # SimplifiedChinese
+        15: ("Yume Nikki", "KIKIYAMA"),         # BrazilianPortuguese
+    }
+
+    for idx, (title, author) in titles.items():
+        base = idx * 0x300
+        # clear entry
+        data[base:base + 0x300] = b"\x00" * 0x300
+        title_bytes = title.encode("utf-8")[:0x1FF]
+        author_bytes = author.encode("utf-8")[:0xFF]
+        data[base:base + len(title_bytes)] = title_bytes
+        data[base + 0x200:base + 0x200 + len(author_bytes)] = author_bytes
 
     with open(path, "wb") as f:
         f.write(data)

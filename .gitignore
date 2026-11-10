@@ -18,6 +18,7 @@ build/*
 dist/
 work/game/
 work/src/
+work/ynotranslations/
 work/*preview*
 work/SwitchKeyGuide_*.png
 tools/Nro2Nsp-master/

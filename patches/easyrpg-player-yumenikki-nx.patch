@@ -380,27 +380,31 @@ diff -urN vendor/easyrpg-player-0.8.1.1/src/platform/switch/input_mapping.h work
 +		keys[Input::Keys::JOY_DPAD_LEFT] = pad.left;
 +		keys[Input::Keys::JOY_DPAD_RIGHT] = pad.right;
 +
-+		// Normal A/B actions (suppressed while L is held or until released after an L+A/B chord).
-+		keys[Input::Keys::JOY_A] = !pad.l && pad.a && !state.suppress_normal_a;
-+		keys[Input::Keys::JOY_B] = !pad.l && pad.b && !state.suppress_normal_b;
++		// Face buttons: A = Decision (互动), B = Cancel / Menu (菜单/取消)
++		keys[Input::Keys::JOY_A] = pad.a;
++		keys[Input::Keys::JOY_B] = pad.b;
 +		keys[Input::Keys::JOY_X] = false;
 +		keys[Input::Keys::JOY_Y] = false;
 +
-+		// Number-key actions: L+A=N1, L+B=N3, Y=N5 (drop effect), X=N9 (pinch cheek).
-+		keys[Input::Keys::N1] = pad.l && pad.a && !state.suppress_chord_a;
-+		keys[Input::Keys::N3] = pad.l && pad.b && !state.suppress_chord_b;
-+		keys[Input::Keys::N5] = pad.y;
-+		keys[Input::Keys::N9] = pad.x;
++		// Number-key actions:
++		// X = N1 (使用效果/坐下)
++		// Y = N3 (退出效果)
++		// L = N5 (丢下效果)
++		// R = N9 (醒来)
++		keys[Input::Keys::N1] = pad.x;
++		keys[Input::Keys::N3] = pad.y;
++		keys[Input::Keys::N5] = pad.l;
++		keys[Input::Keys::N9] = pad.r;
 +
 +		// Shoulder, stick, and menu buttons.
 +		keys[Input::Keys::JOY_SHOULDER_LEFT] = false;
-+		keys[Input::Keys::JOY_SHOULDER_RIGHT] = pad.r;
++		keys[Input::Keys::JOY_SHOULDER_RIGHT] = false;
 +		keys[Input::Keys::JOY_LSTICK] = false;
 +		keys[Input::Keys::JOY_RSTICK] = false;
-+		keys[Input::Keys::JOY_BACK] = pad.minus;
-+		keys[Input::Keys::JOY_START] = pad.plus;
-+		keys[Input::Keys::JOY_LTRIGGER_FULL] = pad.zl;
-+		keys[Input::Keys::JOY_RTRIGGER_FULL] = pad.zr;
++		keys[Input::Keys::JOY_BACK] = pad.minus; // EasyRPG 设置菜单
++		keys[Input::Keys::JOY_START] = pad.plus; // 加号加速
++		keys[Input::Keys::JOY_LTRIGGER_FULL] = false; // ZL 专属用于显隐边框
++		keys[Input::Keys::JOY_RTRIGGER_FULL] = pad.zr; // ZR 加速
 +	}
 +
 +	inline void ApplyPad(const PadState& pad, std::bitset<Input::Keys::KEYS_COUNT>& keys) {
@@ -667,6 +671,7 @@ diff -urN vendor/easyrpg-player-0.8.1.1/src/platform/switch/ui.cpp work/src/easy
  #include <unistd.h>
  
  #include "touch_ui_png.h"
++#include "bezel_png.h"
 +#include "input_mapping.h"
  
  #ifdef SUPPORT_AUDIO
